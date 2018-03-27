@@ -3,11 +3,14 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var Movie = require('./models/movie');
 var mongoose = require('mongoose');
+var moment = require('moment');
+var _ = require('lodash');
 var app = express();
 var port = process.env.PORT || 4406;
 
 mongoose.connect('mongodb://localhost:27017/imooc')
 
+app.locals.moment = moment;
 app.set('views', './views/pages');
 app.set('view engine', 'pug');
 
@@ -135,18 +138,24 @@ app.get('/admin/update/:id', function (req, res) {
 
 // 创建、更新电影的接口
 app.post('/admin/movie/new', function (req, res) {
-    console.log(req);
-    var id = req.body.movie._id;
+    var id = req.body.movie.id;
     var movieObj = req.body.movie;
-    var _movie;
+    var _movie = {};
 
-    if (id !== undefined) {
+    if (id) {
         Movie.findById(id, function (err, movie) {
             if (err) {
                 console.log(err);
             }
             _movie = Object.assign(movie, movieObj);
-        })
+
+            _movie.save(function (err, movie) {
+                if (err) {
+                    console.log(err);
+                }
+                res.redirect('/movie/' + movie._id);
+            });
+        });
     } else {
         _movie = new Movie({
             director: movieObj.director,
@@ -158,16 +167,17 @@ app.post('/admin/movie/new', function (req, res) {
             summary: movieObj.summary,
             flash: movieObj.flash,
         });
+
+        _movie.save(function (err, movie) {
+            if (err) {
+                console.log(err);
+            }
+            res.redirect('/movie/' + movie._id);
+        });
     }
-    _movie.save(function (err, movie) {
-        if (err) {
-            console.log(err);
-        }
-        res.redirect('/movie/' + movie._id);
-    });
 });
 
-// list page
+// 列表页
 app.get('/admin/list', function (req, res) {
     Movie.fetch(function (err, movies) {
         if (err) {
@@ -202,6 +212,22 @@ app.get('/admin/list', function (req, res) {
     //         }
     //     ]
     // });
+});
+
+// 删除电影的接口
+app.delete('/admin/list', function (req, res) {
+    var id = req.query.id;
+    Movie.remove({_id: id}, function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json({
+                msg: '删除成功',
+                id,
+                success: 1
+            });
+        }
+    });
 });
 
 app.listen(port, function () {

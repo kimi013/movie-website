@@ -40,8 +40,8 @@ MovieSchema.static('fetch', function (callback) {
         .exec(callback);
 });
 
-MovieSchema.static('findById', function (id, callback) {
-    return this.findOne({_id: id})
+MovieSchema.static('findById', function (_id, callback) {
+    return this.findOne({_id: _id})
         .sort('meta.updateAt')
         .exec(callback);
 });
