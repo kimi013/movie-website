@@ -49,3 +49,20 @@ UserSchema.pre('save', function (next) {
     });
 });
 
+
+UserSchema.static('fetch', function (callback) {
+    return this.find({})
+        .sort('meta.updateAt')
+        .exec(callback);
+});
+
+// todo 已经存在的方法
+UserSchema.static('findById', function (_id, callback) {
+    return this.findOne({_id: _id})
+        .sort('meta.updateAt')
+        .exec(callback);
+});
+
+
+
+module.exports = UserSchema;
