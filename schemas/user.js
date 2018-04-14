@@ -37,7 +37,7 @@ UserSchema.pre('save', function (next) {
         if (err) {
             return next(err);
         }
-        
+
         bcrypt.hash(user.password, salt, function (err, hash) {
             if (err) {
                 return next(err);
@@ -50,19 +50,32 @@ UserSchema.pre('save', function (next) {
 });
 
 
+// 核对密码
+UserSchema.method('comparePassword', function (_password, cb) {
+    var _self = this;
+    bcrypt.compare(_password, _self.password, function (err, isMatch) {
+
+        if (err) {
+            return cb(err);
+        }
+
+        cb(null, isMatch);
+    });
+});
+
+
 UserSchema.static('fetch', function (callback) {
     return this.find({})
         .sort('meta.updateAt')
         .exec(callback);
 });
 
-// todo 已经存在的方法
+// todo 已经存在的方法 ?
 UserSchema.static('findById', function (_id, callback) {
     return this.findOne({_id: _id})
         .sort('meta.updateAt')
         .exec(callback);
 });
-
 
 
 module.exports = UserSchema;

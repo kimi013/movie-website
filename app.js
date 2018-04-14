@@ -60,13 +60,42 @@ app.post('/user/signup', function (req, res) {
                 // console.log(user);
 
                 res.redirect('/admin/userlist');
-            })
-
+            });
         }
     });
-    
-
 });
+
+// 登录
+app.post('/user/signin', function (req, res) {
+    var _user = req.body.user;
+
+    var name = _user.name,
+        password = _user.password;
+
+    User.findOne({name: name}, function (err, user) {
+        if (err) {
+            console.log(err);
+        }
+
+        if (!user) {
+            return res.redirect('/');
+        }
+
+        user.comparePassword(password, function (err, isMatch) {
+            if (err) {
+                console.log(err);
+            }
+
+            if (isMatch) {
+                console.log('Password is matched');
+                return res.redirect('/');
+            } else {
+                console.log('Password is not matched');
+            }
+        });
+    })
+});
+
 
 // 用户列表页
 app.get('/admin/userlist', function (req, res) {
