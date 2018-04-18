@@ -1,6 +1,9 @@
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var MongoStore = require('connect-mongo')(session);
 var Movie = require('./models/movie');
 var User = require('./models/user');
 var mongoose = require('mongoose');
@@ -9,7 +12,9 @@ var _ = require('lodash');
 var app = express();
 var port = process.env.PORT || 4406;
 
-mongoose.connect('mongodb://localhost:27017/imooc')
+var dbUrl = 'mongodb://localhost:27017/imooc';
+
+mongoose.connect(dbUrl)
 
 app.locals.moment = moment;
 app.set('views', './views/pages');
@@ -21,13 +26,29 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+// https://github.com/expressjs/cookie-parser
+app.use(cookieParser());
+
+// https://github.com/expressjs/session
+app.use(session({
+    secret: 'imooc',
+    resave: false,
+    saveUninitialized: true,
+    store: new MongoStore({
+        url: dbUrl,
+        collection: 'sessions'
+    })
+}));
+
 app.use(express.static(path.join(__dirname, 'static')));
 
 // 首页
 app.get('/', function (req, res) {
+    console.log('user in session: ');
+    console.log(req.session.user);
     Movie.fetch(function (err, movies) {
         if (err) {
-            console.log(err);
+            console.log(err)
         }
 
         res.render('index', {
@@ -57,8 +78,6 @@ app.post('/user/signup', function (req, res) {
                     console.log(err);
                 }
 
-                // console.log(user);
-
                 res.redirect('/admin/userlist');
             });
         }
@@ -87,6 +106,9 @@ app.post('/user/signin', function (req, res) {
             }
 
             if (isMatch) {
+                // 登录状态存到session里
+                req.session.user = user;
+
                 console.log('Password is matched');
                 return res.redirect('/');
             } else {
