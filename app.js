@@ -15,7 +15,7 @@ var dbUrl = 'mongodb://localhost:27017/imooc';
 mongoose.connect(dbUrl)
 
 app.locals.moment = moment;
-app.set('views', './views/pages');
+app.set('views', './app/views/pages');
 app.set('view engine', 'pug');
 
 // bodyParser的用法
