@@ -11,7 +11,7 @@ exports.signup = function (req, res) {
         }
 
         if (user) {
-            return res.redirect('/');
+            return res.redirect('/signin');
         } else {
             var newUser = new User(_user);
 
@@ -20,7 +20,7 @@ exports.signup = function (req, res) {
                     console.log(err);
                 }
 
-                res.redirect('/admin/userlist');
+                res.redirect('/');
             });
         }
     });
@@ -40,7 +40,7 @@ exports.signin = function (req, res) {
         }
 
         if (!user) {
-            return res.redirect('/');
+            return res.redirect('/signup');
         }
 
         user.comparePassword(password, function (err, isMatch) {
@@ -56,9 +56,26 @@ exports.signin = function (req, res) {
                 return res.redirect('/');
             } else {
                 console.log('Password is not matched');
+                return res.redirect('/signin');
             }
         });
     })
+};
+
+
+// 注册页
+exports.showSignup = function (req, res) {
+    res.render('signup', {
+        title: '注册页面'
+    });
+};
+
+
+// 登录页
+exports.showSignin = function (req, res) {
+    res.render('signin', {
+        title: '登录页面'
+    });
 };
 
 

@@ -22,6 +22,12 @@ module.exports = function (app) {
     // 登录接口
     app.post('/user/signin', User.signin);
 
+    // 登录页面
+    app.get('/signin', User.showSignin);
+
+    // 注册页面
+    app.get('/signup', User.showSignup);
+
     // 登出接口
     app.get('/logout', User.logout);
 
