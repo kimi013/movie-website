@@ -101,3 +101,27 @@ exports.list = function (req, res) {
         });
     });
 };
+
+
+// 检测登录中间件
+exports.signinRequired = function (req, res, next) {
+    var user = req.session.user;
+
+    if (!user) {
+        return res.redirect('/signin');
+    }
+
+    next();
+};
+
+
+// 监测管理员中间件
+exports.adminRequired = function (req, res, next) {
+    var user = req.session.user;
+
+    if (!user || user.role <= 10) {
+        return res.redirect('/signin');
+    }
+
+    next();
+};

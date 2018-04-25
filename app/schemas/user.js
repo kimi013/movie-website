@@ -11,6 +11,17 @@ var UserSchema = new mongoose.Schema({
         unique: true,
         type: String
     },
+    /**
+     * 0: 普通用户
+     * 1: 激活后的用户
+     * 2: 高级用户
+     * > 10: 管理员
+     * > 50: 超级管理员
+     */
+    role: {
+        type: Number,
+        default: 0
+    },
     meta: {  // 录入或更新的时间记录
         createAt: {
             type: Date,

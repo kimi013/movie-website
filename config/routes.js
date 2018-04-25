@@ -32,7 +32,7 @@ module.exports = function (app) {
     app.get('/logout', User.logout);
 
     // 用户列表页
-    app.get('/admin/userlist', User.list);
+    app.get('/admin/user/list', User.signinRequired, User.adminRequired, User.list);
 
 
     //// 电影
@@ -40,18 +40,18 @@ module.exports = function (app) {
     app.get('/movie/:id', Movie.detail);
 
     // 后台录入页
-    app.get('/admin/movie', Movie.new);
+    app.get('/admin/movie/new', User.signinRequired, User.adminRequired, Movie.new);
 
     // 后台更新页
-    app.get('/admin/update/:id', Movie.update);
+    app.get('/admin/movie/update/:id', User.signinRequired, User.adminRequired, Movie.update);
 
     // 创建、更新电影的接口
-    app.post('/admin/movie/new', Movie.save);
+    app.post('/admin/movie/new', User.signinRequired, User.adminRequired, Movie.save);
 
     // 列表页
-    app.get('/admin/list', Movie.list);
+    app.get('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.list);
 
     // 删除电影的接口
-    app.delete('/admin/list', Movie.del);
+    app.delete('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.del);
 };
 
