@@ -1,19 +1,27 @@
 var Movie = require('../models/movie');
+var Comment = require('../models/comment');
 var _ = require('lodash');
 
 
 // 详情页
-exports.detail =  function (req, res) {
+exports.detail = function (req, res) {
     var id = req.params.id;
 
     Movie.findById(id, function (err, movie) {
-        if (err) {
-            console.log(err);
-        }
-        res.render('detail', {
-            title: 'imooc' + movie.title,
-            movie: movie
-        });
+        // if (err) {
+        //     console.log(err);
+        // }
+
+        Comment
+            .find({movie: id})
+            .populate('from', 'name')      // todo populate方法
+            .exec(function (err, comments) {
+                res.render('detail', {
+                    title: 'imooc' + movie.title,
+                    movie: movie,
+                    comments: comments
+                });
+            });
     });
 };
 
@@ -52,7 +60,7 @@ exports.update = function (req, res) {
 
 
 // 创建、更新电影的接口
-exports.save =  function (req, res) {
+exports.save = function (req, res) {
     var id = req.body.movie.id;
     var movieObj = req.body.movie;
     var _movie = {};

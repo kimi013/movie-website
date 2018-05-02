@@ -1,6 +1,7 @@
 var Index = require('../app/controllers/index');
 var User = require('../app/controllers/user');
 var Movie = require('../app/controllers/movie');
+var Comment = require('../app/controllers/comment');
 
 
 module.exports = function (app) {
@@ -53,5 +54,9 @@ module.exports = function (app) {
 
     // 删除电影的接口
     app.delete('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.del);
+
+
+    //// 评论
+    app.post('/user/comment', User.signinRequired, Comment.save)
 };
 
