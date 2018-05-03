@@ -15,6 +15,7 @@ exports.detail = function (req, res) {
         Comment
             .find({movie: id})
             .populate('from', 'name')      // todo populate方法
+            .populate('reply.from reply.to', 'name')
             .exec(function (err, comments) {
                 res.render('detail', {
                     title: 'imooc' + movie.title,
