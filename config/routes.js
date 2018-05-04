@@ -2,6 +2,7 @@ var Index = require('../app/controllers/index');
 var User = require('../app/controllers/user');
 var Movie = require('../app/controllers/movie');
 var Comment = require('../app/controllers/comment');
+var Category = require('../app/controllers/category');
 
 
 module.exports = function (app) {
@@ -57,6 +58,18 @@ module.exports = function (app) {
 
 
     //// 评论
-    app.post('/user/comment', User.signinRequired, Comment.save)
+    // 提交评论
+    app.post('/user/comment', User.signinRequired, Comment.save);
+
+
+    //// 分类
+    // 后台分类录入页
+    app.get('/admin/category/new', User.signinRequired, User.adminRequired, Category.new);
+
+    // 创建、更新分类的接口
+    app.post('/admin/category', User.signinRequired, User.adminRequired, Category.save);
+
+    // 列表页
+    app.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list);
 };
 
