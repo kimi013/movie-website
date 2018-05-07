@@ -1,4 +1,5 @@
 var Movie = require('../models/movie');
+var Category = require('../models/category');
 var Comment = require('../models/comment');
 var _ = require('lodash');
 
@@ -29,18 +30,12 @@ exports.detail = function (req, res) {
 
 // 后台录入页
 exports.new = function (req, res) {
-    res.render('admin', {
-        title: 'Movie website 后台录入页',
-        movie: {
-            title: '',
-            director: '',
-            country: '',
-            year: '',
-            poster: '',
-            flash: '',
-            summary: '',
-            language: ''
-        }
+    Category.find({}, function (err, categories) {
+        res.render('admin', {
+            title: 'Movie website 后台录入页',
+            categories: categories,
+            movie: {}
+        });
     });
 };
 
@@ -81,16 +76,7 @@ exports.save = function (req, res) {
             });
         });
     } else {
-        _movie = new Movie({
-            director: movieObj.director,
-            title: movieObj.title,
-            country: movieObj.country,
-            language: movieObj.language,
-            year: movieObj.year,
-            poster: movieObj.poster,
-            summary: movieObj.summary,
-            flash: movieObj.flash,
-        });
+        _movie = new Movie(movieObj);
 
         _movie.save(function (err, movie) {
             if (err) {

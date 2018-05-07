@@ -4,13 +4,12 @@ var ObjectId = Schema.Types.ObjectId;
 
 var CategorySchema = new Schema({
     title: String,
-    kk: String,
-    movies: [
+    movies: /*[
         {
             type: ObjectId,
             ref: 'Movie'
         }
-    ],
+    ]*/String,
     meta: {  // 录入或更新的时间记录
         createAt: {
             type: Date,

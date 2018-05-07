@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+var Movie = require('../models/movie');
 var Category = require('../models/category');
 
 
@@ -15,6 +17,7 @@ exports.index = function (req, res) {
             if (err) {
                 console.log(err)
             }
+
 
             res.render('index', {
                 title: 'imooc 首页',

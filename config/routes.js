@@ -58,7 +58,7 @@ module.exports = function (app) {
 
 
     //// 评论
-    // 提交评论
+    // 提交评论接口
     app.post('/user/comment', User.signinRequired, Comment.save);
 
 

@@ -6,7 +6,7 @@ block content
             each cat in categories
                 .panel.panel-primary
                     .panel-heading
-                        h3 #{cat.name}
+                        h3 #{cat.title}
                     .panel-body
                         if cat.movies && cat.movies.length > 0
                             each item in movies
