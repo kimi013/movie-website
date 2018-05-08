@@ -14,7 +14,7 @@ block content
                 tbody
                     each item in categories
                         tr(class="item-id-" + item._id)
-                            td #{item.title}
+                            td #{item.name}
                             td #{moment(item.meta.updateAt).format('MM/DD/YYYY')}
                             td: a(target="_blank", href="../movie/" + item._id) 查看
                             td: a(target="_blank", href="../admin/update/" + item._id) 修改

@@ -20,7 +20,7 @@ var UserSchema = new mongoose.Schema({
      */
     role: {
         type: Number,
-        default: 0
+        default: 50
     },
     meta: {  // 录入或更新的时间记录
         createAt: {

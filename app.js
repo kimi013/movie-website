@@ -44,12 +44,12 @@ app.listen(port, function () {
     console.log('App running at port ' + port);
 });
 
-if (app.get('env') === 'development') {
-    app.set('showStackError',  true);           // 错误上屏
-    app.use(morgan('combined'));    // morgan
-    app.locals.pretty = true;                   // 代码不压缩
-    mongoose.set('debug', true);                // debug模式
-}
+// if (app.get('env') === 'development') {
+//     app.set('showStackError',  true);           // 错误上屏
+//     // app.use(morgan('combined'));    // morgan
+//     app.locals.pretty = true;                   // 代码不压缩
+//     mongoose.set('debug', true);                // debug模式
+// }
 
 require('./config/routes')(app);
 

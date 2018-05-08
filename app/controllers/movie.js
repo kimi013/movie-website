@@ -46,9 +46,12 @@ exports.update = function (req, res) {
 
     if (id) {
         Movie.findById(id, function (err, movie) {
-            res.render('admin', {
-                title: 'imooc 后台更新页',
-                movie: movie
+            Category.find({}, function (err, categories) {
+                res.render('admin', {
+                    title: 'imooc 后台更新页',
+                    movie: movie,
+                    categories: categories
+                });
             });
         });
     }
@@ -78,11 +81,20 @@ exports.save = function (req, res) {
     } else {
         _movie = new Movie(movieObj);
 
+        var categoryId = _movie.category;
+
         _movie.save(function (err, movie) {
             if (err) {
                 console.log(err);
             }
-            res.redirect('/movie/' + movie._id);
+
+            Category.findById(categoryId, function (err, category) {
+                category.movies.push(_movie._id);
+
+                category.save(function (err, category) {
+                    res.redirect('/movie/' + movie._id);
+                });
+            });
         });
     }
 };
