@@ -7,6 +7,7 @@ var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 var moment = require('moment');
 var morgan = require('morgan');
+var multipart = require('connect-multiparty');
 
 var app = express();
 var port = process.env.PORT || 4406;
@@ -26,6 +27,9 @@ app.use(bodyParser.urlencoded({
 
 // https://github.com/expressjs/cookie-parser
 app.use(cookieParser());
+
+// https://github.com/expressjs/connect-multiparty
+app.use(multipart());
 
 // https://github.com/expressjs/session
 app.use(session({

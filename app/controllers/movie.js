@@ -2,6 +2,8 @@ var Movie = require('../models/movie');
 var Category = require('../models/category');
 var Comment = require('../models/comment');
 var _ = require('lodash');
+var fs = require('fs');
+var path = require('path');
 
 
 // 详情页
@@ -58,12 +60,42 @@ exports.update = function (req, res) {
 };
 
 
+// 保存海报
+exports.savePoster = function (req, res, next) {
+    var posterData = req.files.uploadPoster;
+    var filePath = posterData.path;
+    var originalFilename = posterData.originalFilename;
+
+    console.log(req.files);
+
+    if (originalFilename) {
+        fs.readFile(filePath, function (err, data) {
+            var timestamp = Date.now();
+            var type = posterData.type.split('/')[1];
+            var poster = timestamp + '.' + type;
+            var newPath = path.join(__dirname, '../../', '/static/upload/' + poster);
+
+            fs.writeFile(newPath, data, function (err) {
+                req.poster = poster;
+                next();
+            });
+        });
+    } else {
+        next();
+    }
+};
+
+
 // 创建、更新电影的接口
 exports.save = function (req, res) {
     var id = req.body.movie.id;
     var movieObj = req.body.movie;
 
     var _movie = {};
+
+    if (req.poster) {
+        movieObj.poster = req.poster;
+    }
 
     if (id) {
         Movie.findById(id, function (err, movie) {

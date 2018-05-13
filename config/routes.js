@@ -48,7 +48,7 @@ module.exports = function (app) {
     app.get('/admin/movie/update/:id', User.signinRequired, User.adminRequired, Movie.update);
 
     // 创建、更新电影的接口
-    app.post('/admin/movie/new', User.signinRequired, User.adminRequired, Movie.save);
+    app.post('/admin/movie/new', User.signinRequired, User.adminRequired, Movie.savePoster, Movie.save);
 
     // 列表页
     app.get('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.list);
