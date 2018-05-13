@@ -71,5 +71,9 @@ module.exports = function (app) {
 
     // 列表页
     app.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list);
+
+
+    //// 结果
+    app.get('/results', Index.search);
 };
 
