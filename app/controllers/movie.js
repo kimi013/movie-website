@@ -15,6 +15,18 @@ exports.detail = function (req, res) {
         //     console.log(err);
         // }
 
+        Movie.update({
+            _id: id
+        }, {
+            $inc: {
+                pv: 1
+            }
+        }, function (err) {
+            if (err) {
+                console.log(err);
+            }
+        });
+
         Comment
             .find({movie: id})
             .populate('from', 'name')      // todo populate方法
@@ -65,8 +77,6 @@ exports.savePoster = function (req, res, next) {
     var posterData = req.files.uploadPoster;
     var filePath = posterData.path;
     var originalFilename = posterData.originalFilename;
-
-    console.log(req.files);
 
     if (originalFilename) {
         fs.readFile(filePath, function (err, data) {
